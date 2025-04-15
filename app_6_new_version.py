@@ -16,7 +16,7 @@ st.markdown("""
 # ✅ Header with logo and title
 col1, col2 = st.columns([2, 6])
 with col1:
-    st.image("metco.png", width=140)
+    st.image("METCO Logo - FINAL OG_Square (1).png", width=140)
 with col2:
     st.markdown("## Utility Rate Search Tool")
 
@@ -58,12 +58,37 @@ sort_order = st.radio("Order", ["Ascending", "Descending"], horizontal=True)
 ascending = True if sort_order == "Ascending" else False
 df_sorted = df_filtered.sort_values(by=sort_column, ascending=ascending)
 
-# ✅ Show table
+
+# ✅ Show table with renamed columns
+# if not df_sorted.empty:
+#     st.subheader("Filtered Rates")
+#     df_display = df_sorted[["zip", "utility_name", "comm_rate", "ind_rate", "res_rate"]].rename(columns={
+#         "zip": "Zip Code",
+#         "utility_name": "Utility Name",
+#         "comm_rate": "Commercial Rate",
+#         "ind_rate": "Industrial Rate",
+#         "res_rate": "Residential Rate"
+#     }).reset_index(drop=True)
+#     st.table(df_display)
+# else:
+#     st.warning("No data found for selected filters.")
+
+# ✅ Show table with renamed columns and better layout
 if not df_sorted.empty:
     st.subheader("Filtered Rates")
-    st.table(df_sorted[["zip", "utility_name", "comm_rate", "ind_rate", "res_rate"]].reset_index(drop=True))
+    df_display = df_sorted[["zip", "utility_name", "comm_rate", "ind_rate", "res_rate"]].rename(columns={
+        "zip": "Zip Code",
+        "utility_name": "Utility Name",
+        "comm_rate": "Commercial Rate",
+        "ind_rate": "Industrial Rate",
+        "res_rate": "Residential Rate"
+    }).reset_index(drop=True)
+
+    # Use dataframe with width styling
+    st.dataframe(df_display.style.set_table_attributes('style="width: 100%;"'), use_container_width=True)
 else:
     st.warning("No data found for selected filters.")
+
 
 # ✅ Footer
 st.markdown("""
