@@ -50,13 +50,28 @@ selected_ownership = st.selectbox("Select Ownership (Optional)", ownership_optio
 if selected_ownership != "All":
     df_filtered = df_filtered[df_filtered["ownership"] == selected_ownership]
 
-# ✅ Sorting Options
+# ✅ Sorting Options with Display Names
 st.markdown("### Sort Results")
-sort_column = st.selectbox("Sort by", ["comm_rate", "ind_rate", "res_rate"])
-sort_order = st.radio("Order", ["Ascending", "Descending"], horizontal=True)
 
-ascending = True if sort_order == "Ascending" else False
+# Mapping for display name -> actual column name
+sort_column_mapping = {
+    "Commercial Rate": "comm_rate",
+    "Industrial Rate": "ind_rate",
+    "Residential Rate": "res_rate"
+}
+
+# Display the long names in dropdown
+sort_display = st.selectbox("Sort by", list(sort_column_mapping.keys()))
+
+# Choose sort order
+sort_order = st.radio("Order", ["Ascending", "Descending"], horizontal=True)
+ascending = sort_order == "Ascending"
+
+# Get actual column name from selected display name
+sort_column = sort_column_mapping[sort_display]
+
 df_sorted = df_filtered.sort_values(by=sort_column, ascending=ascending)
+
 
 
 # ✅ Show table with renamed columns
@@ -97,3 +112,4 @@ st.markdown("""
         © 2025 METCO R&D Team. All rights reserved.
     </div>
 """, unsafe_allow_html=True)
+
